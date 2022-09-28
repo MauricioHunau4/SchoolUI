@@ -1,11 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import Main from './components/Main/Main'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import Login from './components/Login/Login'
+
+import ForEach from './components/ForEach';
 
 function App() {
-  return (
-    <div className="App">
+  return <Router>
+    <Routes>
+      <Route exact path="/" element={<Main />} />
+      <Route exact path="/login" element={<Login />} />
+      <Route exact path="/foreach" element={<ForEach />} />
+      {/*<Route exact path="/:id" element={<Entities />} />*/}
+    </Routes>
+  </Router>;
+}
+
+export default App;
+
+/*{data ===null?<></> : 
+      data[0].entitie === "school"? <Route exact path ="/school" element={<School/>}/>: 
+      data[0].entitie === "professor" ? <Route exact path ="/professor" element={<Professor/>}/>: 
+      data[0].entitie === "student" ? <Route exact path ="/student" element={<Student/>}/>:
+      <></>
+      } */
+/*
+<div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />
@@ -51,8 +71,5 @@ function App() {
           </a>
         </span>
       </header>
-    </div>
-  );
-}
-
-export default App;
+    </div> 
+*/
