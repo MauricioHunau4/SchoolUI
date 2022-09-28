@@ -1,39 +1,33 @@
-import { Button, TextField, Typography } from '@mui/material'
 import React from 'react'
+import { useState } from 'react'
+import FormProfessorModal from './FormProfessorModal'
 
 function FormModal(props) {
-    //let data = JSON.parse(sessionStorage.getItem('session'))
+    let data = JSON.parse(sessionStorage.getItem('session'))
 
+    if (data.entitie==="professor"){
     return (<>
-        <form>
-            <Typography sx={{ fontSize: "30px" }}>Mauricio</Typography>
-            <TextField
-                id="subject-input"
-                name="subject"
-                type="text"
-                placeholder="Subject"
-            //value={`${props.subject}`}
-            />
-            <TextField
-                id="grade-input"
-                name="grade"
-                type="text"
-                placeholder="Grade" />
-            <TextField
-                id="comment-input"
-                name="comment"
-                type="text"
-                multiline={true}
-                rows={4}
-                placeholder="Comment"
-            />
-        </form>
-        <Button onClick={props.handleClosing}>
-            button
-        </Button>
+        <FormProfessorModal handleClosing={props.handleClosing}/>
     </>
-    )
+    )}else if(data.entitie==="school"){
+        <FormSchoolModal handleClosing={props.handleClosing}/>
+    }
 
 }
+
+const FormSchoolModal = (props) =>{
+    const[entitieChange, setEntitieChange] = useState({
+        name:props.name,
+        lastname:props.lastname,
+        dateOfBirth:props.dateOfBirth,
+        subject:props.subject,
+        email:props.email
+    })
+    
+    return(<>
+
+    </>)
+}
+
 
 export default FormModal

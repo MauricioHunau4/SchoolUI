@@ -143,3 +143,25 @@ export const tableDesign ={
     left:"50%",
     transform: 'translate(-50%, 10%)' 
 }
+
+//Modal
+
+export const modalEstructure={
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'antiquewhite',
+    border: 'none',
+    borderRadius:"15px",
+    boxShadow: 24,
+    p: 4,
+    justifyContent:"center",
+    alignItems:"center"
+}
+
+export const modalTypography = {
+    bgcolor:"white",
+    
+}
