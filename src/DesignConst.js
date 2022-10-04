@@ -97,12 +97,12 @@ export const boxForm = {
     padding: "2%",
 }
 
-export const radioGroup ={
-    padding:"10px 0",
-    bgcolor: "#D9D9D9", 
-    width: "95%", 
-    borderRadius: "15px", 
-    position: "relative", 
+export const radioGroup = {
+    padding: "10px 0",
+    bgcolor: "#D9D9D9",
+    width: "95%",
+    borderRadius: "15px",
+    position: "relative",
     margin: "auto"
 }
 
@@ -135,18 +135,18 @@ export const buttonBack = {
 
 //Table
 
-export const tableDesign ={ 
-    width: '90%', 
-    overflow: 'hidden', 
-    position: "absolute", 
-    top:"50%", 
-    left:"50%",
-    transform: 'translate(-50%, 10%)' 
+export const tableDesign = {
+    width: '90%',
+    overflow: 'hidden',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: 'translate(-50%, 10%)'
 }
 
 //Modal
 
-export const modalEstructure={
+export const modalEstructure = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -154,14 +154,53 @@ export const modalEstructure={
     width: 400,
     bgcolor: 'antiquewhite',
     border: 'none',
-    borderRadius:"15px",
+    borderRadius: "15px",
     boxShadow: 24,
     p: 4,
-    justifyContent:"center",
-    alignItems:"center"
+    justifyContent: "center",
+    alignItems: "center"
 }
 
 export const modalTypography = {
-    bgcolor:"white",
-    
+    bgcolor: "white",
+
+}
+
+//Adding
+
+export const tableAdding = {
+    position:"absolute", 
+    top: "50%", 
+    left:"50%", 
+    transform:"translate(-50%, 10%)", 
+    width:"90%", 
+    bgcolor:"white", 
+    borderRadius:"5px",
+    overflow:"auto",
+    height:"500px"
+}
+
+export const letterHeadTable = {
+    fontFamily: "Roboto,Helvetica,Arial,sans-serif;",
+    fontWeight: "500",
+    fontSize: "0.875rem",
+    lineHeight: "1.5rem",
+    letterSpacing: "0.01071em"
+}
+
+export const letterTable ={
+    fontFamily: "Roboto,Helvetica,Arial,sans-serif;",
+    fontWeight: "400",
+    fontSize: "0.875rem",
+    lineHeight: "1.43",
+    letterSpacing: "0.01071em",
+    width:"35px"
+}
+
+export const cellTable ={
+    padding:"5px",
+    display:"flex", 
+    justifyContent:"space-around", 
+    border:"0.5px solid #E6E6E6", 
+    alignItems:"center"
 }

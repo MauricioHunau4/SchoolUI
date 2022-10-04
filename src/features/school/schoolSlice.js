@@ -3,6 +3,10 @@ import axios from 'axios'
 
 const initialState = {
     isLoading: false,
+    snackbar: false,
+    trash: false,
+    checkbox:false,
+    dataAdding:[],
     error:{},
     data: []
 }
@@ -25,11 +29,24 @@ export const schoolSlice = createSlice({
             state.isLoading = false
             state.error = action.payload
         },
+        snackBarCheck:(state, action)=>{
+            state.snackbar = action.payload
+        },
+        trashCheck:(state, action)=>{
+            state.trash = action.payload
+        },
+        dataAdding:(state, action )=>{
+            if(action.payload !== "clear"){
+                state.dataAdding.push(action.payload)
+            }else{
+                state.dataAdding = []
+            }
+        }
     }
 })
 
 
-export const { fetchStart, fetchComplete, fetchError, BarChanging, LoginEntitie } = schoolSlice.actions
+export const { fetchStart, fetchComplete, fetchError, snackBarCheck, trashCheck, dataAdding } = schoolSlice.actions
 
 
 export const fetchS = (id) => async dispatch =>{

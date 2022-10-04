@@ -1,9 +1,8 @@
 import { TableCell } from "@mui/material";
 
 const TablesRow = (props) => {
-    let data = JSON.parse(sessionStorage.getItem('session'))
 
-    if (data.entitie === "student") {
+    if (props.entitie === "student") {
         return <>{props.columnsOfGrades.map((column) => {
             const value = props.row[column.id];
             return (
@@ -16,7 +15,8 @@ const TablesRow = (props) => {
         })}
         </>
     }
-    else if (data.entitie === "professor") {
+
+    else if (props.entitie === "professor") {
         return <>{props.columnsOfStudents.map((column) => {
             const value = props.row[column.id];
             return (

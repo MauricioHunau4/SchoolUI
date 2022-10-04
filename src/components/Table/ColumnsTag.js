@@ -2,7 +2,7 @@ import { TableCell } from "@mui/material"
 
 const ColumnsTag = (props) => {
     let data = JSON.parse(sessionStorage.getItem('session'))
-  
+
     if (data.entitie === "student") {
       return <>{props.columnsOfGrades.map((column) => (
         <TableCell

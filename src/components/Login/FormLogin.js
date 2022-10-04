@@ -78,7 +78,7 @@ function FormLogin() {
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
                     defaultValue="Who is login"
-                    value={entitie}
+                    
                     onChange={handleChangeEntitie}
                     name="radio-buttons-group"
                     row

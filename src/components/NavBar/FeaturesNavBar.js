@@ -28,8 +28,6 @@ const LoginShows = (props) => {
 }
 
 const EntitieIcon = (props) => {
-
-
     if (props.data.entitie === "student") {
         return <PersonIcon sx={{ color: "black", fontSize: 40 }} />
     } else if (props.data.entitie === "professor") {
@@ -44,7 +42,7 @@ const NameShow = (props) => {
     if (props.data!== null) {
         return <>
         <EntitieIcon data={props.data}/>
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Box sx={{ display: "flex", flexDirection: "column", margin:" 0 60px 0" }}>
                 <Typography sx={{ color: "black", padding: "0 0 0 0" }}>
                     {props.data.username}
                 </Typography>
