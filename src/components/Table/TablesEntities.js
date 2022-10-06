@@ -1,24 +1,69 @@
-import React, { useState } from 'react'
-import Paper from '@mui/material/Paper';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-import TableForEachEntitie from './TableForEachEntitie';
-import { Box, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react'
+
+//MUI
+import { Box, Button, IconButton, Popover, Typography, TableContainer, TablePagination, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ModalEntities from '../Modal/ModalEntities';
-import { tableDesign } from '../../DesignConst';
-import { useDispatch } from 'react-redux';
-import { trashCheck } from '../../features/school/schoolSlice';
 import CommentIcon from '@mui/icons-material/Comment';
+
+//Internal Imports
+import ModalEntities from '../Modal/ModalEntities';
+import TableForEachEntitie from './TableForEachEntitie';
+import { tableDesign } from '../../DesignConst';
+import { subjects, classes } from '../TagsForColumns';
+
+//Redux imports
+import { trashCheck } from '../../features/school/schoolSlice';
+import { useDispatch } from 'react-redux';
+
+//Crear un JSON con todos los datos de las personas 
+
 
 export default function TablesEntities(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  const [newRows, setNewRows] = useState(rows)
+  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  useEffect(() => {
+    for (let materia in subjects) {
+      if (props.subjectSelection === subjects[materia]) {
+        setNewRows(rowsForStudents.filter(obj => Object.keys(obj).some(key => obj[key] === subjects[materia])))
+      }else if(props.subjectSelection === ""){
+        setNewRows(rowsForStudents)
+      }
+    }
+  }, [props.subjectSelection ])
+
+  useEffect(()=>{
+    for(let classSelect in classes){
+      if (props.classOfStudents === classes[classSelect]) {
+        setNewRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === classes[classSelect])))
+      }else if(props.classOfStudents === ""){
+        setNewRows(rows)
+      }
+    }
+  },[props.classOfStudents])
+  
+  useEffect(()=>{
+    if (props.dateSearch !== '') {
+      setNewRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === props.dateSearch)))
+    }else if(props.dateSearch === ""){
+      setNewRows(rows)
+    }
+  },[props.dateSearch])
+
+  console.log(rows.filter(obj => obj.student.includes(props.search))) //funcion que filtre
+ 
+  useEffect(()=>{
+    if (props.search !== '') {
+      setNewRows(rows.filter(obj => obj.student.includes(props.search)))
+    }else if(props.search === ""){
+      setNewRows(rows)
+    }
+  },[props.search])
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -28,16 +73,17 @@ export default function TablesEntities(props) {
     <Paper sx={tableDesign}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <TableForEachEntitie
-          rows={rows}
+          subjectSelection={props.subjectSelection}
+          rows={newRows}
           page={page}
           rowsPerPage={rowsPerPage}
-          rowsForStudents={rowsForStudents}
+          rowsForStudents={newRows}
         />
       </TableContainer >
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={newRows.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -52,7 +98,7 @@ function ButtonDelete() {
   const deletingPeople = () => {
     dispatch(trashCheck(true))
   }
-  
+
   return (
     <Button type='submit' onClick={() => { deletingPeople() }}>
       <DeleteIcon sx={{ color: "black" }} />
@@ -60,7 +106,7 @@ function ButtonDelete() {
   )
 }
 
-function CreateDataForProfessor(student, subject, grade, date, classOfStudents) {
+export function CreateDataForProfessor(student, subject, grade, date, classOfStudents) {
   const edit =
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <ModalEntities student={student} grade={grade} subject={subject} />
@@ -69,17 +115,43 @@ function CreateDataForProfessor(student, subject, grade, date, classOfStudents) 
   return { student, subject, grade, date, classOfStudents, edit };
 }
 
-function createDataForGrades(subject, grade, professor, date, commented) {
+export function createDataForGrades(subject, grade, professor, date, commented) {
   const comment = <CheckComment commented={commented} />
   return { subject, grade, professor, date, comment }
 }
 
 function CheckComment(props) {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+ 
   if (props.commented !== "") {
-    return (
-      <Button sx={{ height: "20px", color: "gray" }}>
+    return (<>
+      <IconButton sx={{ height: "20px", color: "gray" }}  onClick={handleClick}>
         <CommentIcon />
-      </Button>
+      </IconButton>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Typography sx={{ p: 2 }}>{props.commented}</Typography>
+      </Popover>
+    </>
     )
   } else {
     return (<></>)
@@ -88,52 +160,69 @@ function CheckComment(props) {
 }
 
 const rows = [
-  CreateDataForProfessor('James States', 'IN', 1324171354, 3287263, 2),
-  CreateDataForProfessor('Anderson States', 'CN', 1403500365, 9596961, 2),
-  CreateDataForProfessor('Italy Kingdom', 'IT', 60483973, 301340, 2),
-  CreateDataForProfessor('James States', 'US', 327167434, 9833520, 2),
-  CreateDataForProfessor('Anderson States', 'CA', 37602103, 9984670, 2),
-  CreateDataForProfessor('Italy States', 'AU', 25475400, 7692024, 2),
-  CreateDataForProfessor('Germany States', 'DE', 83019200, 357578, 2),
-  CreateDataForProfessor('Ireland States', 'IE', 4857000, 70273, 2),
-  CreateDataForProfessor('Mexico Kingdom', 'MX', 126577691, 1972550, 2),
-  CreateDataForProfessor('Japan Kingdom', 'JP', 126317000, 377973, 2),
-  CreateDataForProfessor('France Kingdom', 'FR', 67022000, 640679, 2),
-  CreateDataForProfessor('United Kingdom', 'GB', 67545757, 242495, 2),
-  CreateDataForProfessor('Russia States', 'RU', 146793744, 17098246, 2),
-  CreateDataForProfessor('Nigeria Kingdom', 'NG', 200962417, 923768, 2),
-  CreateDataForProfessor('Brazil Kingdom', 'BR', 210147125, 8515767, 2),
+  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
+  CreateDataForProfessor('Anderson States', 'Math', 1403500365, "2022-08-06", 103),
+  CreateDataForProfessor('Italy Kingdom', 'Math', 60483973, "2022-08-06", 103),
+  CreateDataForProfessor('James States', 'Math', 327167434, "2022-08-06", 103),
+  CreateDataForProfessor('Anderson States', 'Math', 37602103, "2022-08-06", 103),
+  CreateDataForProfessor('Italy States', 'Math', 35475400, "2022-08-06", 103),
+  CreateDataForProfessor('Germany States', 'Math', 83019200, "2022-06-06", 103),
+  CreateDataForProfessor('Ireland States', 'Math', 4857000, "2022-06-06", 103),
+  CreateDataForProfessor('Ireland States', 'Math', 4857000, "2022-06-06", 103),
+  CreateDataForProfessor('Ireland States', 'Math', 4857000, "2022-06-06", 103),
+  CreateDataForProfessor('Mexico Kingdom', 'Math', 126577691, "2022-05-10", 101),
+  CreateDataForProfessor('Japan Kingdom', 'Math', 126317000, "2022-05-10", 101),
+  CreateDataForProfessor('France Kingdom', 'Math', 67022000, "2022-05-10", 101),
+  CreateDataForProfessor('United Kingdom', 'Math', 67545757, "2022-05-10", 101),
+  CreateDataForProfessor('Russia States', 'Math', 146793744, "2022-05-10", 101),
+  CreateDataForProfessor('Nigeria Kingdom', 'Math', 200962417, "2022-05-10", 101),
+  CreateDataForProfessor('Brazil Kingdom', 'Math', 210147125, "2022-09-10", 101),
+  CreateDataForProfessor('Japan Kingdom', 'Math', 126317000, "2022-09-10", 104),
+  CreateDataForProfessor('France Kingdom', 'Math', 67022000, "2022-09-10", 104),
+  CreateDataForProfessor('United Kingdom', 'Math', 67545757, "2022-09-10", 104),
+  CreateDataForProfessor('Russia States', 'Math', 146793744, "2022-09-10", 104),
+  CreateDataForProfessor('Nigeria Kingdom', 'Math', 200962417, "2022-05-10", 104),
+  CreateDataForProfessor('Brazil Kingdom', 'Math', 210447125, "2022-09-10", 104),
 ];
 
-const rowsForStudents = [
-  createDataForGrades('Math', 9.0, "1324171354", 3287263, "hola"),
-  createDataForGrades('History', 6.5, "1324171354", 9596961, ""),
-  createDataForGrades('Science', 4.0, "1324171354", 301340, "hola"),
-  createDataForGrades('Math', 10.0, "1324171354", 9833520, "hola"),
-  createDataForGrades('Math', 7.0, "1324171354", 9984670, "hola"),
-  createDataForGrades('Science', 7.5, "1324171354", 7692024, "hola"),
-  createDataForGrades('History', 3.0, "1324171354", 357578, "hola"),
-  createDataForGrades('History', 7.5, "1324171354", 70273, "hola"),
-  createDataForGrades('Science', 7.5, "1324171354", 1972550, "hola"),
-  createDataForGrades('History', 7.5, "1324171354", 377973, ""),
-  createDataForGrades('Science', 7.5, "1324171354", 640679, ""),
-  createDataForGrades('Math', 7.5, "1324171354", 242495, ""),
-  createDataForGrades('Math', 7.5, "1324171354", 17098246, ""),
-  createDataForGrades('Geography', 7.5, "1324171354", 923768, ""),
-  createDataForGrades('Geography', 7.5, "1324171354", 8515767, ""),
-  createDataForGrades('Math', 9.0, "1324171354", 3287263, "hola"),
-  createDataForGrades('History', 6.5, "1324171354", 9596961, "hola"),
-  createDataForGrades('Science', 4.0, "1324171354", 301340, "hola"),
-  createDataForGrades('Math', 10.0, "1324171354", 9833520, "hola"),
-  createDataForGrades('Math', 7.0, "1324171354", 9984670, "hola"),
-  createDataForGrades('Science', 7.5, "1324171354", 7692024, "hola"),
-  createDataForGrades('History', 3.0, "1324171354", 357578, "hola"),
-  createDataForGrades('History', 7.5, "1324171354", 70273, "hola"),
-  createDataForGrades('Science', 7.5, "1324171354", 1972550, "hola"),
-  createDataForGrades('History', 7.5, "1324171354", 377973, ""),
-  createDataForGrades('Science', 7.5, "1324171354", 640679, ""),
-  createDataForGrades('Math', 7.5, "1324171354", 242495, ""),
-  createDataForGrades('Math', 7.5, "1324171354", 17098246, ""),
-  createDataForGrades('Geography', 7.5, "1324171354", 923768, ""),
-  createDataForGrades('Geography', 7.5, "1324171354", 8515767, ""),
-];
+ const rowsForStudents = [
+  createDataForGrades('Geography', 7.5, "Diane Butler", "5/5/2022", ""),
+  createDataForGrades('Geography', 7.5, "Diane Butler", "5/8/2022", ""),
+  createDataForGrades('Geography', 7.5, "Diane Butler", "5/14/2022", ""),
+  createDataForGrades('Geography', 7.5, "Diane Butler", "5/22/2022", ""),
+  createDataForGrades('Geography', 7.5, "Diane Butler", "6/1/2022", ""),
+  createDataForGrades('Math', 10.0, "James Smith", "6/6/2022", "Test for the comments"),
+  createDataForGrades('Math', 7.0, "James Smith", "6/8/2022", "Test for the comments"),
+  createDataForGrades('Science', 7.5, "Marcel Renue", "6/15/2022", "Test for the comments"),
+  createDataForGrades('History', 3.0, "Steven Jong", "10/5/2022", "Test for the comments"),
+  createDataForGrades('History', 7.5, "Steven Jong", "10/5/2022", "Test for the comments"),
+  createDataForGrades('Science', 7.5, "Marcel Renue", "10/5/2022", "Test for the comments"),
+  createDataForGrades('History', 7.5, "Steven Jong", "10/5/2022", ""),
+  createDataForGrades('Science', 7.5, "Marcel Renue", "10/5/2022", ""),
+  createDataForGrades('Math', 7.5, "James Smith", "10/5/2022", ""),
+  createDataForGrades('Math', 7.5, "James Smith", "10/5/2022", ""),
+  createDataForGrades('Geography', 7.5, "Diane Butler", "10/5/2022", ""),
+  createDataForGrades('Geography', 7.5, "Diane Butler", "10/5/2022", ""),
+  createDataForGrades('Math', 9.0, "James Smith", "10/5/2022", "Test for the comments"),
+  createDataForGrades('History', 6.5, "Steven Jong", "10/7/2022", ""),
+  createDataForGrades('Science', 4.0, "Marcel Renue", "10/8/2022", "Test for the comments"),
+  createDataForGrades('Math', 10.0, "James Smith", "10/9/2022", "Test for the comments"),
+  createDataForGrades('Math', 7.0, "James Smith", "10/15/2022", "Test for the comments"),
+  createDataForGrades('Science', 7.5, "Marcel Renue", "10/22/2022", "Test for the comments"),
+  createDataForGrades('History', 3.0, "Steven Jong", "11/5/2022", "Test for the comments"),
+  createDataForGrades('History', 7.5, "Steven Jong", "11/9/2022", "Test for the comments"),
+  createDataForGrades('Science', 7.5, "Marcel Renue", "11/14/2022", "Test for the comments"),
+  createDataForGrades('History', 7.5, "Steven Jong", "11/16/2022", ""),
+  createDataForGrades('Science', 7.5, "Marcel Renue", "11/25/2022", ""),
+  createDataForGrades('Math', 7.5, "James Smith", "10/5/2022", ""),
+  createDataForGrades('Math', 7.5, "James Smith", "10/5/2022", ""),
+]
+
+

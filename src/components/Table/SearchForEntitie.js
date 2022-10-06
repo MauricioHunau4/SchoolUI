@@ -1,5 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { Box } from "@mui/system"
+import {classes, subjects} from '../TagsForColumns'
 
 function SearchForEntitie(props) {
     let data = JSON.parse(sessionStorage.getItem('session'))
@@ -62,6 +63,3 @@ function SearchForEntitie(props) {
 
 export default SearchForEntitie
 
-const classes = [101, 102, 103, 104]
-
-const subjects = ["Math", "Science", "Geography", "History"]

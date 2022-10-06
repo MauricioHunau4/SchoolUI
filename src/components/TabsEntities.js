@@ -59,8 +59,8 @@ function TabPanel(props) {
   const [subjectSelection, setSubjectSelection] = useState("")
   const [openGrade, setOpenGrade] = useState(snackbar);
   const [openTrash, setOpenTrash] = useState(trash);
-  const [search, setSearch] = useState()
-  const [dateSearch, setDateSearch] = useState()
+  const [search, setSearch] = useState('')
+  const [dateSearch, setDateSearch] = useState('')
   const [classOfStudents, setClassOfStudents] = useState('');
 
   const handleSearchDate = (e) => {
@@ -136,6 +136,7 @@ function TabPanel(props) {
             classOfStudents={classOfStudents}
             handleSearchDate={handleSearchDate} />
           <TablesEntities
+            subjectSelection={subjectSelection}
             search={search}
             dateSearch={dateSearch}
             classOfStudents={classOfStudents} />

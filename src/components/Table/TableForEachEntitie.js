@@ -17,7 +17,6 @@ import RowsPerEntitie from './RowsPerEntitie';
 
 
 export default function TableForEachEntitie(props) {
-
   return (<>
     <Table stickyHeader aria-label="sticky table">
       <TableHead>
@@ -32,6 +31,7 @@ export default function TableForEachEntitie(props) {
       </TableHead>
       <TableBody>
         <RowsPerEntitie
+          subjectSelection={props.subjectSelection}
           columnsOfGrades={columnsOfGrades}
           columnsOfProfessor={columnsOfProfessor}
           columnsOfStudents={columnsOfStudents}
@@ -44,27 +44,3 @@ export default function TableForEachEntitie(props) {
   </>
   )
 }
-
-
-
-
-/*{columnsProfessor.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))} */
-
-/*{columnsOfProfessor.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })} */
