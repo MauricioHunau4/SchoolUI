@@ -13,16 +13,14 @@ import { subjects, classes } from '../TagsForColumns';
 
 //Redux imports
 import { trashCheck } from '../../features/school/schoolSlice';
-import { useDispatch } from 'react-redux';
-
-//Crear un JSON con todos los datos de las personas 
+import { useDispatch } from 'react-redux'; 
 
 
 export default function TablesEntities(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [newRows, setNewRows] = useState(rows)
-  
+  const [rowsSchool, setRowsSchool] = useState(rowsProfessorForSchool)
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -31,39 +29,48 @@ export default function TablesEntities(props) {
     for (let materia in subjects) {
       if (props.subjectSelection === subjects[materia]) {
         setNewRows(rowsForStudents.filter(obj => Object.keys(obj).some(key => obj[key] === subjects[materia])))
-      }else if(props.subjectSelection === ""){
+      } else if (props.subjectSelection === "") {
         setNewRows(rowsForStudents)
       }
     }
-  }, [props.subjectSelection ])
+  }, [props.subjectSelection])
 
-  useEffect(()=>{
-    for(let classSelect in classes){
+  useEffect(() => {
+    for (let classSelect in classes) {
       if (props.classOfStudents === classes[classSelect]) {
         setNewRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === classes[classSelect])))
-      }else if(props.classOfStudents === ""){
+      } else if (props.classOfStudents === "") {
         setNewRows(rows)
       }
     }
-  },[props.classOfStudents])
-  
-  useEffect(()=>{
+  }, [props.classOfStudents])
+
+  useEffect(() => {
     if (props.dateSearch !== '') {
       setNewRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === props.dateSearch)))
-    }else if(props.dateSearch === ""){
+    } else if (props.dateSearch === "") {
       setNewRows(rows)
     }
-  },[props.dateSearch])
-
-  console.log(rows.filter(obj => obj.student.includes(props.search))) //funcion que filtre
- 
-  useEffect(()=>{
+  }, [props.dateSearch])
+  
+  useEffect(() => {
     if (props.search !== '') {
+      if(props.schoolChooseEntitie === 'professor'){
+        setRowsSchool(rowsProfessorForSchool.filter(obj => obj.name.includes(props.search)))
+      }else{
+        setRowsSchool(rowsStudentForSchool.filter(obj => obj.name.includes(props.search)))
+      }
       setNewRows(rows.filter(obj => obj.student.includes(props.search)))
-    }else if(props.search === ""){
+    } else if (props.search === "") {
+      if(props.schoolChooseEntitie === 'professor'){
+        setRowsSchool(rowsProfessorForSchool)
+      }else{
+        setRowsSchool(rowsStudentForSchool)
+      }
       setNewRows(rows)
     }
-  },[props.search])
+  }, [props.search, props.schoolChooseEntitie])
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -73,7 +80,9 @@ export default function TablesEntities(props) {
     <Paper sx={tableDesign}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <TableForEachEntitie
+          schoolChooseEntitie={props.schoolChooseEntitie}
           subjectSelection={props.subjectSelection}
+          rowsSchool={rowsSchool}
           rows={newRows}
           page={page}
           rowsPerPage={rowsPerPage}
@@ -107,17 +116,42 @@ function ButtonDelete() {
 }
 
 export function CreateDataForProfessor(student, subject, grade, date, classOfStudents) {
+
   const edit =
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <ModalEntities student={student} grade={grade} subject={subject} />
       <ButtonDelete />
     </Box>
+
   return { student, subject, grade, date, classOfStudents, edit };
 }
 
 export function createDataForGrades(subject, grade, professor, date, commented) {
   const comment = <CheckComment commented={commented} />
   return { subject, grade, professor, date, comment }
+}
+
+export function createDataForSchoolStudent(name, email, classes, dateOfBirth) {
+  const edit =
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <ModalEntities
+        name={name}
+        email={email}
+        classes={classes}
+        dateOfBirth={dateOfBirth}
+         />
+      <ButtonDelete />
+    </Box>
+  return { name, email, classes, dateOfBirth, edit }
+}
+
+export function createDataForSchoolProfessor(name, subject, email, phoneNumber) {
+  const edit =
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <ModalEntities name={name} subject={subject} email={email} phoneNumber={phoneNumber} />
+      <ButtonDelete />
+    </Box>
+  return { name, subject, email, phoneNumber, edit }
 }
 
 function CheckComment(props) {
@@ -133,10 +167,10 @@ function CheckComment(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
- 
+
   if (props.commented !== "") {
     return (<>
-      <IconButton sx={{ height: "20px", color: "gray" }}  onClick={handleClick}>
+      <IconButton sx={{ height: "20px", color: "gray" }} onClick={handleClick}>
         <CommentIcon />
       </IconButton>
       <Popover
@@ -160,14 +194,14 @@ function CheckComment(props) {
 }
 
 const rows = [
-  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5,  "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
   CreateDataForProfessor('Anderson States', 'Math', 1403500365, "2022-08-06", 103),
   CreateDataForProfessor('Italy Kingdom', 'Math', 60483973, "2022-08-06", 103),
   CreateDataForProfessor('James States', 'Math', 327167434, "2022-08-06", 103),
@@ -192,7 +226,7 @@ const rows = [
   CreateDataForProfessor('Brazil Kingdom', 'Math', 210447125, "2022-09-10", 104),
 ];
 
- const rowsForStudents = [
+const rowsForStudents = [
   createDataForGrades('Geography', 7.5, "Diane Butler", "5/5/2022", ""),
   createDataForGrades('Geography', 7.5, "Diane Butler", "5/8/2022", ""),
   createDataForGrades('Geography', 7.5, "Diane Butler", "5/14/2022", ""),
@@ -225,4 +259,50 @@ const rows = [
   createDataForGrades('Math', 7.5, "James Smith", "10/5/2022", ""),
 ]
 
+const rowsStudentForSchool = [
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+  createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
+]
 
+const rowsProfessorForSchool =[
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+]

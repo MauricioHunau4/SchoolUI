@@ -4,7 +4,7 @@ import {classes, subjects} from '../TagsForColumns'
 
 function SearchForEntitie(props) {
     let data = JSON.parse(sessionStorage.getItem('session'))
-    if (data.entitie !== "student") {
+    if (data.entitie === "professor") {
         return (<>
             <TextField
                 sx={{ marginTop: "15px", width: "30%", bgcolor: "white" }}
@@ -38,7 +38,7 @@ function SearchForEntitie(props) {
                     </Select>
                 </FormControl>
             </Box></>)
-    } else {
+    } else if (data.entitie === "student") {
         return (<>
         <Box sx={{ minWidth: 120, marginTop: "15px", bgcolor: "white" }}>
             <FormControl fullWidth>
@@ -58,6 +58,31 @@ function SearchForEntitie(props) {
             </Box>
         </>
         )
+    }else{
+        return(<>
+        <TextField
+                sx={{ marginTop: "15px", width: "30%", bgcolor: "white" }}
+                id="outlined-basic"
+                label="Search..."
+                variant="outlined"
+                onChange={props.handleSearch}
+            />
+            <Box sx={{ minWidth: 120, marginTop: "15px", bgcolor: "white" }}>
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Entitie</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={props.schoolChooseEntitie}
+                        label="Class"
+                        onChange={props.handleSchoolChooseEntitie}
+                    >
+                        <MenuItem value={"professor"}>Professors</MenuItem>
+                        <MenuItem value={"student"}>Students</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
+        </>)
     }
 }
 

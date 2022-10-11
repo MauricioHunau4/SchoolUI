@@ -204,3 +204,12 @@ export const cellTable ={
     border:"0.5px solid #E6E6E6", 
     alignItems:"center"
 }
+
+export const CellTableSchool = {
+    padding:"5px",
+    display:"flex", 
+    justifyContent:"space-around", 
+    border:"0.5px solid #E6E6E6", 
+    alignItems:"center",
+    textAlign: 'center'
+}

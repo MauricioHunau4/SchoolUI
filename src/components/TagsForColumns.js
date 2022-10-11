@@ -24,10 +24,17 @@ export const columnsOfStudents = [
 ];
 
 export const columnsOfStudentsForSchool = [
-    { id: 'name', label: 'Professor', minWidth: 170 },
+    { id: 'name', label: 'Name', minWidth: 170 },
     { id: 'email', label: 'Email', minWidth: 170, align: 'center', format: (value) => value.toString() },
-    { id: 'phoneNumber', label: 'Phone Number', minWidth: 170, align: 'center', format: (value) => value },
-    { id: 'dateOfBirth', label: 'Date of birth', minWidth: 170, align: 'center', format: (value) => value.toLocaleString('en-US') },
+    { id: 'classes', label: 'Class', minWidth: 170, align: 'center', format: (value)=> value.toString()},
+    { id: 'dateOfBirth', label: 'Date of birth', minWidth: 170, align: 'center', format: (value) => value.toString() },
+    { id: 'edit', label: 'Edit', minWidth: 170, align: 'center' },
+]
+export const columnsOfProfessorsForSchool = [
+    { id: 'name', label: 'Professor', minWidth: 170 },
+    { id: 'subject', label: 'Subject', minWidth: 170, align: 'center' },
+    { id: 'email', label: 'Email', minWidth: 170, align: 'center', format: (value) => value.toString() },
+    { id: 'phoneNumber', label: 'Phone Number', minWidth: 170, align: 'center'},
     { id: 'edit', label: 'Edit', minWidth: 170, align: 'center' },
 ]
 
@@ -35,3 +42,4 @@ export const subjects = ["Math", "Science", "Geography", "History"]
 
 export const classes = [101, 102, 103, 104]
 
+export const peopleToAdd = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]

@@ -10,7 +10,8 @@ import {
   columnsOfGrades,
   columnsOfProfessor,
   columnsOfStudents,
-  columnsOfStudentsForSchool
+  columnsOfStudentsForSchool,
+  columnsOfProfessorsForSchool
 } from '../TagsForColumns';
 import ColumnsTag from './ColumnsTag';
 import RowsPerEntitie from './RowsPerEntitie';
@@ -22,22 +23,30 @@ export default function TableForEachEntitie(props) {
       <TableHead>
         <TableRow>
           <ColumnsTag
+            schoolChooseEntitie={props.schoolChooseEntitie}
             columnsOfGrades={columnsOfGrades}
             columnsOfProfessor={columnsOfProfessor}
             columnsOfStudents={columnsOfStudents}
             columnsOfStudentsForSchool={columnsOfStudentsForSchool}
+            columnsOfProfessorsForSchool={columnsOfProfessorsForSchool}
           />
         </TableRow>
       </TableHead>
       <TableBody>
         <RowsPerEntitie
+          schoolChooseEntitie={props.schoolChooseEntitie}
+          rowsProfessorForSchool={props.rowsProfessorForSchool}
+          rowsStudentForSchool={props.rowsStudentForSchool}
           subjectSelection={props.subjectSelection}
+          columnsOfStudentsForSchool={columnsOfStudentsForSchool}
+          columnsOfProfessorsForSchool={columnsOfProfessorsForSchool}
           columnsOfGrades={columnsOfGrades}
           columnsOfProfessor={columnsOfProfessor}
           columnsOfStudents={columnsOfStudents}
           page={props.page}
           rowsForStudents={props.rowsForStudents}
           rowsPerPage={props.rowsPerPage}
+          rowsSchool={props.rowsSchool}
           rows={props.rows} />
       </TableBody>
     </Table>

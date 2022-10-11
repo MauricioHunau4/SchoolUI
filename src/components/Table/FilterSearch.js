@@ -6,12 +6,14 @@ import SearchForEntitie from './SearchForEntitie'
 function FilterSearch(props) {
     return (<Box sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
         <SearchForEntitie
+            handleSchoolChooseEntitie={props.handleSchoolChooseEntitie}
             handleSubjectSelection={props.handleSubjectSelection}
-            subjectSelection={props.subjectSelection}
             handleSearch={props.handleSearch}
             handleSearchDate={props.handleSearchDate}
-            classOfStudents={props.classOfStudents}
             handleClassSelect={props.handleClassSelect}
+            subjectSelection={props.subjectSelection}
+            classOfStudents={props.classOfStudents}
+            schoolChooseEntitie={props.schoolChooseEntitie}
         />
     </Box>
     )

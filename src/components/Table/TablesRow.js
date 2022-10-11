@@ -15,7 +15,6 @@ const TablesRow = (props) => {
         })}
         </>
     }
-
     else if (props.entitie === "professor") {
         return <>{props.columnsOfStudents.map((column) => {
             const value = props.row[column.id];
@@ -28,6 +27,32 @@ const TablesRow = (props) => {
             );
         })}
         </>
+    } else {
+        if (props.schoolChooseEntitie === 'student') {
+            return <>{props.columnsOfStudentsForSchool.map((column) => {
+                const value = props.row[column.id];
+                return (
+                    <TableCell key={column.id} align={column.align}>
+                        {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value}
+                    </TableCell>
+                );
+            })}
+            </>
+        }else{
+            return <>{props.columnsOfProfessorsForSchool.map((column) => {
+                const value = props.row[column.id];
+                return (
+                    <TableCell key={column.id} align={column.align}>
+                        {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value}
+                    </TableCell>
+                );
+            })}
+            </>
+        }
     }
 }
 

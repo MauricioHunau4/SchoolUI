@@ -7,6 +7,7 @@ import { dataAdding } from '../../features/school/schoolSlice';
 
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
+
 function CellTable(props) {
     const { student, subject } = props.demo
     const [anchorEl, setAnchorEl] = useState(null);

@@ -62,12 +62,28 @@ function TabPanel(props) {
   const [search, setSearch] = useState('')
   const [dateSearch, setDateSearch] = useState('')
   const [classOfStudents, setClassOfStudents] = useState('');
+  const [schoolChooseEntitie, setSchoolChooseEntitie] = useState('professor')
+  const [addingEntitie, setAddingEntitie] = useState('professor')
+  const [classAddingSelection, setClassAddingSelection] = useState(101)
+
+
+  const handleChangeAddingSelection = (e) => {
+    setClassAddingSelection(e.target.value)
+  }
 
   const handleSearchDate = (e) => {
     setDateSearch(e.target.value)
   }
 
-  const handleSubjectSelection =(event)=>{
+  const handleAddingEntitie = (e) => {
+    setAddingEntitie(e.target.value)
+  }
+
+  const handleSchoolChooseEntitie = (e) => {
+    setSchoolChooseEntitie(e.target.value)
+  }
+
+  const handleSubjectSelection = (event) => {
     setSubjectSelection(event.target.value)
   }
 
@@ -128,14 +144,18 @@ function TabPanel(props) {
         <Box sx={{ position: "relative" }}>
           <FilterSearch
             handleSubjectSelection={handleSubjectSelection}
+            handleEntitieSelection={handleEntitieSelection}
+            handleClassSelect={handleClassSelect}
+            handleSchoolChooseEntitie={handleSchoolChooseEntitie}
+            handleSearch={handleSearch}
+            handleSearchDate={handleSearchDate}
             subjectSelection={subjectSelection}
             entitieSelection={entitieSelection}
-            handleEntitieSelection={handleEntitieSelection}
-            handleSearch={handleSearch}
-            handleClassSelect={handleClassSelect}
             classOfStudents={classOfStudents}
-            handleSearchDate={handleSearchDate} />
+            schoolChooseEntitie={schoolChooseEntitie}
+          />
           <TablesEntities
+            schoolChooseEntitie={schoolChooseEntitie}
             subjectSelection={subjectSelection}
             search={search}
             dateSearch={dateSearch}
@@ -155,8 +175,19 @@ function TabPanel(props) {
         </Box>)}
       {value === 1 && (
         <Box sx={{ position: "relative" }}>
-          <SelectionClass classSelection={classSelection} handleChange={handleChange} />
-          <AddingTab classSelection={classSelection} />
+          <SelectionClass
+            classSelection={classSelection}
+            addingEntitie={addingEntitie}
+            handleChange={handleChange}
+            handleAddingEntitie={handleAddingEntitie}
+            classAddingSelection={classAddingSelection}
+            handleChangeAddingSelection={handleChangeAddingSelection}
+             />
+          <AddingTab classSelection={classSelection}
+            schoolChooseEntitie={schoolChooseEntitie}
+            handleAddingEntitie={handleAddingEntitie}
+            addingEntitie={addingEntitie} 
+            classAddingSelection={classAddingSelection}/>
         </Box>)}
     </div>
   );
