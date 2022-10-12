@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 //MUI
-import { Box, Button ,TableContainer, TablePagination, Paper } from '@mui/material';
+import { Box, Button, TableContainer, TablePagination, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 //Internal Imports
@@ -20,8 +20,9 @@ export default function TablesEntities(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [newRows, setNewRows] = useState(rows)
-  const [rowsStudents, setRowsStudents] = useState (rowsForStudents)
+  const [rowsStudents, setRowsStudents] = useState(rowsForStudents)
   const [rowsSchool, setRowsSchool] = useState(rowsProfessorForSchool)
+  const [countRows, setCountRows] = useState(rows.length)
   const dispatch = useDispatch()
 
   const handleChangePage = (event, newPage) => {
@@ -36,41 +37,55 @@ export default function TablesEntities(props) {
         setRowsStudents(rowsForStudents)
       }
     }
+    
   }, [props.subjectSelection])
 
   useEffect(() => {
-    for (let classSelect in classes) {
-      if (props.classOfStudents === classes[classSelect]) {
-        setNewRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === classes[classSelect])))
-      } else if (props.classOfStudents === "") {
-        setNewRows(rows)
+    if (props.classOfStudents === "") {
+      setNewRows(rows)
+      setCountRows(rows.length)
+    } else {
+      for (let classSelect in classes) {
+        if (props.classOfStudents === classes[classSelect]) {
+          setNewRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === classes[classSelect])))
+          setCountRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === classes[classSelect])).length)
+        }
       }
     }
+    
   }, [props.classOfStudents])
 
   useEffect(() => {
     if (props.dateSearch !== '') {
       setNewRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === props.dateSearch)))
+      setCountRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === props.dateSearch)).length)
     } else if (props.dateSearch === "") {
       setNewRows(rows)
+      setCountRows(rows.length)
     }
   }, [props.dateSearch])
-  
+
   useEffect(() => {
     if (props.search !== '') {
-      if(props.schoolChooseEntitie === 'professor'){
+      if (props.schoolChooseEntitie === 'professor') {
         setRowsSchool(rowsProfessorForSchool.filter(obj => obj.name.includes(props.search)))
-      }else{
+        setCountRows(rowsProfessorForSchool.filter(obj => obj.name.includes(props.search)).length)
+      } else {
         setRowsSchool(rowsStudentForSchool.filter(obj => obj.name.includes(props.search)))
+        setCountRows(rowsStudentForSchool.filter(obj => obj.name.includes(props.search)).length)
       }
       setNewRows(rows.filter(obj => obj.student.includes(props.search)))
+      setCountRows(rows.filter(obj => obj.student.includes(props.search)).length)
     } else if (props.search === "") {
-      if(props.schoolChooseEntitie === 'professor'){
+      if (props.schoolChooseEntitie === 'professor') {
         setRowsSchool(rowsProfessorForSchool)
-      }else{
+        setCountRows(rowsProfessorForSchool.length)
+      } else {
         setRowsSchool(rowsStudentForSchool)
+        setCountRows(rowsStudentForSchool.length)
       }
       setNewRows(rows)
+      setCountRows(rows.length)
     }
     dispatch(schoolChooseEntitieForModal(props.schoolChooseEntitie))
   }, [props.search, props.schoolChooseEntitie, dispatch])
@@ -97,7 +112,7 @@ export default function TablesEntities(props) {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={newRows.length}
+        count={countRows}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -122,10 +137,10 @@ function ButtonDelete() {
 }
 
 function CreateDataForProfessor(student, subject, grade, date, classOfStudents, comment) {
-  
+
   const edit =
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <ModalEntities student={student} grade={grade} subject={subject} date={date} comment={comment}/>
+      <ModalEntities student={student} grade={grade} subject={subject} date={date} comment={comment} />
       <ButtonDelete />
     </Box>
 
@@ -145,7 +160,7 @@ function createDataForSchoolStudent(name, email, classes, dateOfBirth) {
         email={email}
         classes={classes}
         dateOfBirth={dateOfBirth}
-         />
+      />
       <ButtonDelete />
     </Box>
   return { name, email, classes, dateOfBirth, edit }
@@ -154,7 +169,7 @@ function createDataForSchoolStudent(name, email, classes, dateOfBirth) {
 function CreateDataForSchoolProfessor(name, subject, email, phoneNumber) {
   const edit =
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <ModalEntities name={name} subject={subject} email={email} phoneNumber={phoneNumber}  />
+      <ModalEntities name={name} subject={subject} email={email} phoneNumber={phoneNumber} />
       <ButtonDelete />
     </Box>
   return { name, subject, email, phoneNumber, edit }
@@ -230,7 +245,7 @@ const rowsForStudents = [
   createDataForGrades('Math', 7.5, "James Smith", "10/5/2022", ""),
   createDataForGrades('Math', 7.5, "James Smith", "10/5/2022", ""),
 ]
- 
+
 
 const rowsStudentForSchool = [
   createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
@@ -255,7 +270,7 @@ const rowsStudentForSchool = [
 ]
 
 
-const rowsProfessorForSchool =[
+const rowsProfessorForSchool = [
   CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
   CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
   CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),

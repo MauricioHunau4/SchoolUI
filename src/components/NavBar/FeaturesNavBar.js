@@ -42,7 +42,7 @@ const NameShow = (props) => {
     if (props.data!== null) {
         return <>
         <EntitieIcon data={props.data}/>
-            <Box sx={{ display: "flex", flexDirection: "column", margin:" 0 60px 0" }}>
+            <Box sx={{ display: "flex", flexDirection: "column", margin:" 0 60px 0" , minWidth:'120px'}}>
                 <Typography sx={{ color: "black", padding: "0 0 0 0" }}>
                     {props.data.username}
                 </Typography>
