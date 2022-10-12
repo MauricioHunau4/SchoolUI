@@ -54,6 +54,9 @@ function CellTable(props) {
         setAnchorEl(null);
     };
 
+    const cancelComment = ()=>{
+        setInformationStudents({ ...informationStudents, comment: '' })
+    }
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -96,10 +99,9 @@ function CellTable(props) {
                 />
                 <Box sx={{ display: "flex", justifiContent: "space-between" }}>
                     <Button onClick={handleClose1} sx={{ color: "black" }}>Save</Button>
-                    <Button onClick={handleClose1} sx={{ color: "black" }}>Cancel</Button>
+                    <Button onClick={cancelComment} sx={{ color: "black" }}>Cancel</Button>
                 </Box>
             </Box>
-
         </Popover>
     </Box>
     )

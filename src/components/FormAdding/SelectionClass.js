@@ -32,8 +32,6 @@ function SelectionClass(props) {
         </React.Fragment>
     );
 
-    console.log(check)
-
     const addingGrades = () => {
         if (check.length === 0) {
             handleClick()
@@ -86,7 +84,7 @@ function SelectionClass(props) {
                         <MenuItem value="student">Student</MenuItem>
                     </Select>
                 </FormControl>
-                {props.addingEntitie !== 'professor' && (<FormControl>
+                {props.addingEntitie !== 'professor' && (<><FormControl>
                     <InputLabel id="demo-simple-select-label">Class</InputLabel>
                     <Select
                         sx={{ width: "100%", bgcolor:'whitesmoke' }}
@@ -99,10 +97,11 @@ function SelectionClass(props) {
                             return <MenuItem value={classes}>{classes}</MenuItem>
                         })}
                     </Select>
-                </FormControl>)}
+                </FormControl>
                 <Button sx={{ color: "black", bgcolor: "#F2994A", width: "30%" }} onClick={addingGrades} >
                     Add Students
                 </Button>
+                </>)}
             </Box>
         )
     }

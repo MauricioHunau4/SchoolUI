@@ -18,6 +18,7 @@ function FormLogin() {
         password: undefined });
     const [name, setName] = useState();
     const [password, setPassword] = useState()
+    // eslint-disable-next-line
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(false)
     const navigate = useNavigate()
@@ -52,19 +53,7 @@ function FormLogin() {
         setError(false)
         if (entitie !== undefined && name !== undefined && password !== undefined) {
             sessionStorage.setItem('session', JSON.stringify(obj))
-            navigate('/foreach')
-            /*setIsLoading(true)
-            await fetch('/').then(()=>{
-                setIsLoading(false)
-                setError(false)}
-            ).then(()=>{
-                sessionStorage.setItem('session', JSON.stringify(obj))
-                navigate(`/${entitie}`)
-            })
-            .catch(err=>{
-                setIsLoading(false)
-                setError(true)
-            })*/
+            navigate(`/${entitie}`)
         }
     }
 

@@ -4,7 +4,7 @@ const initialState = {
     isLoading: false,
     snackbar: false,
     trash: false,
-    checkbox:false,
+    schoolChooseEntitieForModal: 'professor',
     dataAdding:[],
     error:{},
     data: []
@@ -39,11 +39,14 @@ export const schoolSlice = createSlice({
             }else{
                 state.dataAdding = []
             }
+        },
+        schoolChooseEntitieForModal:(state, action) =>{
+            state.schoolChooseEntitieForModal = action.payload
         }
     }
 })
 
 
-export const { fetchStart, fetchComplete, fetchError, snackBarCheck, trashCheck, dataAdding } = schoolSlice.actions
+export const { fetchStart, fetchComplete, fetchError, snackBarCheck, trashCheck, dataAdding, schoolChooseEntitieForModal } = schoolSlice.actions
 
 export default schoolSlice.reducer

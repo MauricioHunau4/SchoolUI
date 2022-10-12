@@ -20,7 +20,19 @@ function ModalEntities(props) {
             aria-describedby="modal-modal-description"
         >
             <Box sx={modalEstructure}>
-                <FormModal handleClosing={handleOpenClose}/>
+                <FormModal
+                    handleClosing={handleOpenClose}
+                    student={props.student} 
+                    grade={props.grade} 
+                    date={props.date} 
+                    name={props.name}
+                    email={props.email}
+                    classes={props.classes}
+                    dateOfBirth={props.dateOfBirth}
+                    subject={props.subject}
+                    phoneNumber={props.phoneNumber}
+                    comment={props.comment}
+                />
             </Box>
         </Modal>
     </div>

@@ -5,10 +5,16 @@ import { CellTableSchool } from '../../DesignConst'
 
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
+import { useDispatch } from 'react-redux';
+import { dataAdding } from '../../features/school/schoolSlice';
 
-/*Tarminar esto, tambien la tabla para los profesores y publicarlo en LinkedIn */
+
 function CellTableForSchool(props) {
     const [disabled, setDisabled] = useState(false)
+    const [error, setError] = useState(false)
+    const [animation, setAnimation] =useState("")
+    const dispatch = useDispatch()
+
     const [addInformationNewStudent, setAddInformationNewStudent] = useState({
         name:'',
         email:'',
@@ -22,8 +28,12 @@ function CellTableForSchool(props) {
 
     const handleCheck = () => {
         if(addInformationNewStudent.name !== '' && addInformationNewStudent.email !== '' && addInformationNewStudent.dateOfBirth !== ''){
+            dispatch(dataAdding(addInformationNewStudent))
             setDisabled(true)
-        }else{}
+        }else{
+            setError(true)
+            setAnimation("animate__animated animate__shakeX")
+        }
     }
 
     return (
@@ -38,31 +48,31 @@ function CellTableForSchool(props) {
             </Box>}
             <TextField
                 sx={{ width: "200px" }}
-                //className={animation}
-                //error={errorGrading}
+                className={animation}
+                error={error}
                 id="outlined-error-helper-text"
                 onChange={handleAddInformationNewStudent}
                 name="name"
-            //disabled={disabled} 
+                disabled={disabled} 
             />
             <TextField
                 sx={{ width: "200px"}}
-                //className={animation}
-                //error={errorGrading}
+                className={animation}
+                error={error}
                 id="outlined-error-helper-text"
                 onChange={handleAddInformationNewStudent}
                 name="email"
-            //disabled={disabled} 
+                disabled={disabled} 
             />
             <TextField
                 sx={{ width: "200px" }}
-                //className={animation}
-                //error={errorGrading}
+                className={animation}
+                error={error}
                 id="outlined-error-helper-text"
                 onChange={handleAddInformationNewStudent}
                 type='date'
                 name="dateOfBirth"
-            //disabled={disabled} 
+                disabled={disabled} 
             />
         </Box>
     )

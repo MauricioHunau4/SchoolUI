@@ -26,7 +26,7 @@ export default function AddingTab(props) {
     }else{
         if(props.addingEntitie === 'professor'){
         return(<Box sx={{position: 'relative'}}>
-            <FormAdding/>
+            <FormAdding handleCloseSnackbar={props.handleCloseSnackbar} handleClickSnackBar={props.handleClickSnackBar}/>
             </Box>
         )}else{
             return (<>

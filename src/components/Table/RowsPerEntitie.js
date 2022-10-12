@@ -6,7 +6,7 @@ const RowsPerEntitie = (props) => {
   let data = JSON.parse(sessionStorage.getItem('session'))
 
   if (data.entitie === "student") {
-    return <>{props.rowsForStudents
+    return <>{props.rowsStudents
       .slice(props.page * props.rowsPerPage, props.page * props.rowsPerPage + props.rowsPerPage)
       .map((row, index) => {
         return (

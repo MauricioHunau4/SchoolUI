@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from 'react'
 
 //MUI
-import { Box, Button, IconButton, Popover, Typography, TableContainer, TablePagination, Paper } from '@mui/material';
+import { Box, Button ,TableContainer, TablePagination, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CommentIcon from '@mui/icons-material/Comment';
 
 //Internal Imports
-import ModalEntities from '../Modal/ModalEntities';
 import TableForEachEntitie from './TableForEachEntitie';
 import { tableDesign } from '../../DesignConst';
 import { subjects, classes } from '../TagsForColumns';
+import CheckComment from './FunctionsTable';
+import { schoolChooseEntitieForModal, trashCheck } from "../../features/school/schoolSlice";
+import ModalEntities from "../Modal/ModalEntities"
 
 //Redux imports
-import { trashCheck } from '../../features/school/schoolSlice';
-import { useDispatch } from 'react-redux'; 
+import { useDispatch } from "react-redux";
 
 
 export default function TablesEntities(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [newRows, setNewRows] = useState(rows)
+  const [rowsStudents, setRowsStudents] = useState (rowsForStudents)
   const [rowsSchool, setRowsSchool] = useState(rowsProfessorForSchool)
+  const dispatch = useDispatch()
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -28,9 +31,9 @@ export default function TablesEntities(props) {
   useEffect(() => {
     for (let materia in subjects) {
       if (props.subjectSelection === subjects[materia]) {
-        setNewRows(rowsForStudents.filter(obj => Object.keys(obj).some(key => obj[key] === subjects[materia])))
+        setRowsStudents(rowsForStudents.filter(obj => Object.keys(obj).some(key => obj[key] === subjects[materia])))
       } else if (props.subjectSelection === "") {
-        setNewRows(rowsForStudents)
+        setRowsStudents(rowsForStudents)
       }
     }
   }, [props.subjectSelection])
@@ -69,7 +72,8 @@ export default function TablesEntities(props) {
       }
       setNewRows(rows)
     }
-  }, [props.search, props.schoolChooseEntitie])
+    dispatch(schoolChooseEntitieForModal(props.schoolChooseEntitie))
+  }, [props.search, props.schoolChooseEntitie, dispatch])
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -83,6 +87,7 @@ export default function TablesEntities(props) {
           schoolChooseEntitie={props.schoolChooseEntitie}
           subjectSelection={props.subjectSelection}
           rowsSchool={rowsSchool}
+          rowsStudents={rowsStudents}
           rows={newRows}
           page={page}
           rowsPerPage={rowsPerPage}
@@ -102,6 +107,7 @@ export default function TablesEntities(props) {
   );
 }
 
+
 function ButtonDelete() {
   const dispatch = useDispatch()
   const deletingPeople = () => {
@@ -115,23 +121,23 @@ function ButtonDelete() {
   )
 }
 
-export function CreateDataForProfessor(student, subject, grade, date, classOfStudents) {
-
+function CreateDataForProfessor(student, subject, grade, date, classOfStudents, comment) {
+  
   const edit =
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <ModalEntities student={student} grade={grade} subject={subject} />
+      <ModalEntities student={student} grade={grade} subject={subject} date={date} comment={comment}/>
       <ButtonDelete />
     </Box>
 
   return { student, subject, grade, date, classOfStudents, edit };
 }
 
-export function createDataForGrades(subject, grade, professor, date, commented) {
+function createDataForGrades(subject, grade, professor, date, commented) {
   const comment = <CheckComment commented={commented} />
   return { subject, grade, professor, date, comment }
 }
 
-export function createDataForSchoolStudent(name, email, classes, dateOfBirth) {
+function createDataForSchoolStudent(name, email, classes, dateOfBirth) {
   const edit =
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <ModalEntities
@@ -145,86 +151,52 @@ export function createDataForSchoolStudent(name, email, classes, dateOfBirth) {
   return { name, email, classes, dateOfBirth, edit }
 }
 
-export function createDataForSchoolProfessor(name, subject, email, phoneNumber) {
+function CreateDataForSchoolProfessor(name, subject, email, phoneNumber) {
   const edit =
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <ModalEntities name={name} subject={subject} email={email} phoneNumber={phoneNumber} />
+      <ModalEntities name={name} subject={subject} email={email} phoneNumber={phoneNumber}  />
       <ButtonDelete />
     </Box>
   return { name, subject, email, phoneNumber, edit }
 }
 
-function CheckComment(props) {
-  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-
-  if (props.commented !== "") {
-    return (<>
-      <IconButton sx={{ height: "20px", color: "gray" }} onClick={handleClick}>
-        <CommentIcon />
-      </IconButton>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        <Typography sx={{ p: 2 }}>{props.commented}</Typography>
-      </Popover>
-    </>
-    )
-  } else {
-    return (<></>)
-  }
-
-}
-
+//Just for the Demo
 const rows = [
-  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
-  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102),
-  CreateDataForProfessor('Anderson States', 'Math', 1403500365, "2022-08-06", 103),
-  CreateDataForProfessor('Italy Kingdom', 'Math', 60483973, "2022-08-06", 103),
-  CreateDataForProfessor('James States', 'Math', 327167434, "2022-08-06", 103),
-  CreateDataForProfessor('Anderson States', 'Math', 37602103, "2022-08-06", 103),
-  CreateDataForProfessor('Italy States', 'Math', 35475400, "2022-08-06", 103),
-  CreateDataForProfessor('Germany States', 'Math', 83019200, "2022-06-06", 103),
-  CreateDataForProfessor('Ireland States', 'Math', 4857000, "2022-06-06", 103),
-  CreateDataForProfessor('Ireland States', 'Math', 4857000, "2022-06-06", 103),
-  CreateDataForProfessor('Ireland States', 'Math', 4857000, "2022-06-06", 103),
-  CreateDataForProfessor('Mexico Kingdom', 'Math', 126577691, "2022-05-10", 101),
-  CreateDataForProfessor('Japan Kingdom', 'Math', 126317000, "2022-05-10", 101),
-  CreateDataForProfessor('France Kingdom', 'Math', 67022000, "2022-05-10", 101),
-  CreateDataForProfessor('United Kingdom', 'Math', 67545757, "2022-05-10", 101),
-  CreateDataForProfessor('Russia States', 'Math', 146793744, "2022-05-10", 101),
-  CreateDataForProfessor('Nigeria Kingdom', 'Math', 200962417, "2022-05-10", 101),
-  CreateDataForProfessor('Brazil Kingdom', 'Math', 210147125, "2022-09-10", 101),
-  CreateDataForProfessor('Japan Kingdom', 'Math', 126317000, "2022-09-10", 104),
-  CreateDataForProfessor('France Kingdom', 'Math', 67022000, "2022-09-10", 104),
-  CreateDataForProfessor('United Kingdom', 'Math', 67545757, "2022-09-10", 104),
-  CreateDataForProfessor('Russia States', 'Math', 146793744, "2022-09-10", 104),
-  CreateDataForProfessor('Nigeria Kingdom', 'Math', 200962417, "2022-05-10", 104),
-  CreateDataForProfessor('Brazil Kingdom', 'Math', 210447125, "2022-09-10", 104),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102, ""),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102, ""),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102, "Test for the comments"),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102, "Test for the comments"),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102, "Test for the comments"),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102, ""),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102, ""),
+  CreateDataForProfessor('James States', 'Math', 7.5, "2022-06-06", 102, ""),
+  CreateDataForProfessor('Anderson States', 'Math', 1403500365, "2022-08-06", 103, ""),
+  CreateDataForProfessor('Italy Kingdom', 'Math', 60483973, "2022-08-06", 103, ""),
+  CreateDataForProfessor('James States', 'Math', 327167434, "2022-08-06", 103, "Test for the comments"),
+  CreateDataForProfessor('Anderson States', 'Math', 37602103, "2022-08-06", 103, "Test for the comments"),
+  CreateDataForProfessor('Italy States', 'Math', 35475400, "2022-08-06", 103, "Test for the comments"),
+  CreateDataForProfessor('Germany States', 'Math', 83019200, "2022-06-06", 103, "Test for the comments"),
+  CreateDataForProfessor('Ireland States', 'Math', 4857000, "2022-06-06", 103, "Test for the comments"),
+  CreateDataForProfessor('Ireland States', 'Math', 4857000, "2022-06-06", 103, ""),
+  CreateDataForProfessor('Ireland States', 'Math', 4857000, "2022-06-06", 103, ""),
+  CreateDataForProfessor('Mexico Kingdom', 'Math', 126577691, "2022-05-10", 101, ""),
+  CreateDataForProfessor('Japan Kingdom', 'Math', 126317000, "2022-05-10", 101, ""),
+  CreateDataForProfessor('France Kingdom', 'Math', 67022000, "2022-05-10", 101, "Test for the comments"),
+  CreateDataForProfessor('United Kingdom', 'Math', 67545757, "2022-05-10", 101, "Test for the comments"),
+  CreateDataForProfessor('Russia States', 'Math', 146793744, "2022-05-10", 101, "Test for the comments"),
+  CreateDataForProfessor('Nigeria Kingdom', 'Math', 200962417, "2022-05-10", 101, "Test for the comments"),
+  CreateDataForProfessor('Brazil Kingdom', 'Math', 210147125, "2022-09-10", 101, "Test for the comments"),
+  CreateDataForProfessor('Japan Kingdom', 'Math', 126317000, "2022-09-10", 104, ""),
+  CreateDataForProfessor('France Kingdom', 'Math', 67022000, "2022-09-10", 104, ""),
+  CreateDataForProfessor('United Kingdom', 'Math', 67545757, "2022-09-10", 104, ""),
+  CreateDataForProfessor('Russia States', 'Math', 146793744, "2022-09-10", 104, ""),
+  CreateDataForProfessor('Nigeria Kingdom', 'Math', 200962417, "2022-05-10", 104, "Test for the comments"),
+  CreateDataForProfessor('Brazil Kingdom', 'Math', 210447125, "2022-09-10", 104, "Test for the comments"),
 ];
+
 
 const rowsForStudents = [
   createDataForGrades('Geography', 7.5, "Diane Butler", "5/5/2022", ""),
@@ -258,6 +230,7 @@ const rowsForStudents = [
   createDataForGrades('Math', 7.5, "James Smith", "10/5/2022", ""),
   createDataForGrades('Math', 7.5, "James Smith", "10/5/2022", ""),
 ]
+ 
 
 const rowsStudentForSchool = [
   createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
@@ -281,28 +254,29 @@ const rowsStudentForSchool = [
   createDataForSchoolStudent('Jhon Stamos', 'Jhon@stamos.com', 201, '2004-05-04'),
 ]
 
+
 const rowsProfessorForSchool =[
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
-  createDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
+  CreateDataForSchoolProfessor('Queen Elizabeth', 'History', 'Queen@Majestie.com', 1133351234),
 ]

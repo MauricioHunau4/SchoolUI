@@ -169,15 +169,15 @@ export const modalTypography = {
 //Adding
 
 export const tableAdding = {
-    position:"absolute", 
-    top: "50%", 
-    left:"50%", 
-    transform:"translate(-50%, 10%)", 
-    width:"90%", 
-    bgcolor:"white", 
-    borderRadius:"5px",
-    overflow:"auto",
-    height:"500px"
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, 10%)",
+    width: "90%",
+    bgcolor: "white",
+    borderRadius: "5px",
+    overflow: "auto",
+    height: "500px"
 }
 
 export const letterHeadTable = {
@@ -188,28 +188,39 @@ export const letterHeadTable = {
     letterSpacing: "0.01071em"
 }
 
-export const letterTable ={
+export const letterTable = {
     fontFamily: "Roboto,Helvetica,Arial,sans-serif;",
     fontWeight: "400",
     fontSize: "0.875rem",
     lineHeight: "1.43",
     letterSpacing: "0.01071em",
-    width:"35px"
+    width: "35px"
 }
 
-export const cellTable ={
-    padding:"5px",
-    display:"flex", 
-    justifyContent:"space-around", 
-    border:"0.5px solid #E6E6E6", 
-    alignItems:"center"
+export const cellTable = {
+    padding: "5px",
+    display: "flex",
+    justifyContent: "space-around",
+    border: "0.5px solid #E6E6E6",
+    alignItems: "center"
 }
 
 export const CellTableSchool = {
-    padding:"5px",
-    display:"flex", 
-    justifyContent:"space-around", 
-    border:"0.5px solid #E6E6E6", 
-    alignItems:"center",
+    padding: "5px",
+    display: "flex",
+    justifyContent: "space-around",
+    border: "0.5px solid #E6E6E6",
+    alignItems: "center",
     textAlign: 'center'
+}
+
+export const formAdding = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%', 
+    transform: 'translate(-50%, 5%)', 
+    width: '20%', 
+    border: '0.5px solid black', 
+    borderRadius: '15px', 
+    padding: '3%'
 }

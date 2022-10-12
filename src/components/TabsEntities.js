@@ -66,7 +66,6 @@ function TabPanel(props) {
   const [addingEntitie, setAddingEntitie] = useState('professor')
   const [classAddingSelection, setClassAddingSelection] = useState(101)
 
-
   const handleChangeAddingSelection = (e) => {
     setClassAddingSelection(e.target.value)
   }
@@ -82,7 +81,7 @@ function TabPanel(props) {
   const handleSchoolChooseEntitie = (e) => {
     setSchoolChooseEntitie(e.target.value)
   }
-
+  
   const handleSubjectSelection = (event) => {
     setSubjectSelection(event.target.value)
   }
@@ -94,6 +93,7 @@ function TabPanel(props) {
   const handleClose = (event, reason) => {
     dispatch(snackBarCheck(false))
     dispatch(trashCheck(false))
+  
   };
 
   const [entitieSelection, setEntitieSelection] = useState("Professor")
@@ -167,6 +167,7 @@ function TabPanel(props) {
             snackbar={snackbar}
           />
           <TrashShow
+            schoolChooseEntitie={schoolChooseEntitie}
             action={action}
             handleCloseTrash={handleClose}
             trash={trash}
@@ -182,12 +183,13 @@ function TabPanel(props) {
             handleAddingEntitie={handleAddingEntitie}
             classAddingSelection={classAddingSelection}
             handleChangeAddingSelection={handleChangeAddingSelection}
-             />
-          <AddingTab classSelection={classSelection}
+          />
+          <AddingTab
+            classSelection={classSelection}
             schoolChooseEntitie={schoolChooseEntitie}
             handleAddingEntitie={handleAddingEntitie}
-            addingEntitie={addingEntitie} 
-            classAddingSelection={classAddingSelection}/>
+            addingEntitie={addingEntitie}
+            classAddingSelection={classAddingSelection} />
         </Box>)}
     </div>
   );

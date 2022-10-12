@@ -44,6 +44,7 @@ export default function TableForEachEntitie(props) {
           columnsOfProfessor={columnsOfProfessor}
           columnsOfStudents={columnsOfStudents}
           page={props.page}
+          rowsStudents={props.rowsStudents}
           rowsForStudents={props.rowsForStudents}
           rowsPerPage={props.rowsPerPage}
           rowsSchool={props.rowsSchool}

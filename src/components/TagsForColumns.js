@@ -1,3 +1,4 @@
+
 export const columnsOfGrades = [
     { id: 'subject', label: 'Subject', minWidth: 170 },
     { id: 'grade', label: 'Grade', minWidth: 100, format: (value) => value.toFixed(2) },
@@ -26,7 +27,7 @@ export const columnsOfStudents = [
 export const columnsOfStudentsForSchool = [
     { id: 'name', label: 'Name', minWidth: 170 },
     { id: 'email', label: 'Email', minWidth: 170, align: 'center', format: (value) => value.toString() },
-    { id: 'classes', label: 'Class', minWidth: 170, align: 'center', format: (value)=> value.toString()},
+    { id: 'classes', label: 'Class', minWidth: 170, align: 'center', format: (value) => value.toString() },
     { id: 'dateOfBirth', label: 'Date of birth', minWidth: 170, align: 'center', format: (value) => value.toString() },
     { id: 'edit', label: 'Edit', minWidth: 170, align: 'center' },
 ]
@@ -34,7 +35,7 @@ export const columnsOfProfessorsForSchool = [
     { id: 'name', label: 'Professor', minWidth: 170 },
     { id: 'subject', label: 'Subject', minWidth: 170, align: 'center' },
     { id: 'email', label: 'Email', minWidth: 170, align: 'center', format: (value) => value.toString() },
-    { id: 'phoneNumber', label: 'Phone Number', minWidth: 170, align: 'center'},
+    { id: 'phoneNumber', label: 'Phone Number', minWidth: 170, align: 'center' },
     { id: 'edit', label: 'Edit', minWidth: 170, align: 'center' },
 ]
 
