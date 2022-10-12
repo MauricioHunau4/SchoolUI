@@ -39,7 +39,7 @@ export const columnsOfProfessorsForSchool = [
     { id: 'edit', label: 'Edit', minWidth: 170, align: 'center' },
 ]
 
-export const subjects = ["Math", "Science", "Geography", "History"]
+export const subjects = ["Math", "Science", "Geography", "History", "Art", "Economy", 'P.E.', 'Music','Informatic', 'Cousine', 'Spanish','English', 'Psicology', 'France', 'Theatre']
 
 export const classes = [101, 102, 103, 104]
 
