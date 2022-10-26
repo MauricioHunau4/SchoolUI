@@ -15,7 +15,7 @@ import BoxInformation from "./BoxInformation";
 import { boxEmailAndPhrase, flexMainInfoAndIcon, flexSchoolChoose, mainBackgroundImage, typographyInfo, typographyPhrase } from "../../DesignConst";
 
 export default function Main() {
-    
+
     let obj = null
     sessionStorage.setItem('session', JSON.stringify(obj))
 
@@ -29,7 +29,7 @@ export default function Main() {
                         sx={typographyInfo}>
                         The space that all the institutions want
                     </Typography>
-                    <BoxInformation/>
+                    <BoxInformation />
                 </Box>
             </Box>
             <Box sx={{ bgcolor: "#F2994A" }}>
@@ -41,13 +41,13 @@ export default function Main() {
                 </Typography>
                 <Box sx={flexSchoolChoose}>
                     {schools.map(school => {
-                        return <SchoolsChoose school={school} key={school.id}/>
+                        return <SchoolsChoose school={school} key={school.id} />
                     })}
                 </Box>
             </Box>
             <Box sx={boxEmailAndPhrase}>
                 <Typography variant="h3" sx={typographyPhrase}>
-                    If you want to register you school, contact us.
+                    If you want to register your school, contact us.
                 </Typography>
                 <Box sx={{ bgcolor: "#3A3A3A", width: 479, height: 480 }}>
                     <FormMail />

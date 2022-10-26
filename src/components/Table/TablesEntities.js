@@ -7,21 +7,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 //Internal Imports
 import TableForEachEntitie from './TableForEachEntitie';
 import { tableDesign } from '../../DesignConst';
-import { subjects, classes } from '../TagsForColumns';
 import CheckComment from './FunctionsTable';
-import { schoolChooseEntitieForModal, trashCheck } from "../../features/school/schoolSlice";
+import { trashCheck } from "../../features/school/schoolSlice";
 import ModalEntities from "../Modal/ModalEntities"
 
 //Redux imports
 import { useDispatch } from "react-redux";
+import { useClassOfStudents, useDateSearch, useSearchAndSchoolEntitie, useSubjectSelection } from '../Hooks/useEffects';
 
 
 export default function TablesEntities(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [newRows, setNewRows] = useState(rows)
-  const [rowsStudents, setRowsStudents] = useState(rowsForStudents)
-  const [rowsSchool, setRowsSchool] = useState(rowsProfessorForSchool)
   const [countRows, setCountRows] = useState(rows.length)
   const dispatch = useDispatch()
 
@@ -29,71 +27,43 @@ export default function TablesEntities(props) {
     setPage(newPage);
   };
 
-  useEffect(() => {
-    for (let materia in subjects) {
-      if (props.subjectSelection === subjects[materia]) {
-        setRowsStudents(rowsForStudents.filter(obj => Object.keys(obj).some(key => obj[key] === subjects[materia])))
-      } else if (props.subjectSelection === "") {
-        setRowsStudents(rowsForStudents)
-      }
-    }
-    
-  }, [props.subjectSelection])
-
-  useEffect(() => {
-    if (props.classOfStudents === "") {
-      setNewRows(rows)
-      setCountRows(rows.length)
-    } else {
-      for (let classSelect in classes) {
-        if (props.classOfStudents === classes[classSelect]) {
-          setNewRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === classes[classSelect])))
-          setCountRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === classes[classSelect])).length)
-        }
-      }
-    }
-    
-  }, [props.classOfStudents])
-
-  useEffect(() => {
-    if (props.dateSearch !== '') {
-      setNewRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === props.dateSearch)))
-      setCountRows(rows.filter(obj => Object.keys(obj).some(key => obj[key] === props.dateSearch)).length)
-    } else if (props.dateSearch === "") {
-      setNewRows(rows)
-      setCountRows(rows.length)
-    }
-  }, [props.dateSearch])
-
-  useEffect(() => {
-    if (props.search !== '') {
-      if (props.schoolChooseEntitie === 'professor') {
-        setRowsSchool(rowsProfessorForSchool.filter(obj => obj.name.includes(props.search)))
-        setCountRows(rowsProfessorForSchool.filter(obj => obj.name.includes(props.search)).length)
-      } else {
-        setRowsSchool(rowsStudentForSchool.filter(obj => obj.name.includes(props.search)))
-        setCountRows(rowsStudentForSchool.filter(obj => obj.name.includes(props.search)).length)
-      }
-      setNewRows(rows.filter(obj => obj.student.includes(props.search)))
-      setCountRows(rows.filter(obj => obj.student.includes(props.search)).length)
-    } else if (props.search === "") {
-      if (props.schoolChooseEntitie === 'professor') {
-        setRowsSchool(rowsProfessorForSchool)
-        setCountRows(rowsProfessorForSchool.length)
-      } else {
-        setRowsSchool(rowsStudentForSchool)
-        setCountRows(rowsStudentForSchool.length)
-      }
-      setNewRows(rows)
-      setCountRows(rows.length)
-    }
-    dispatch(schoolChooseEntitieForModal(props.schoolChooseEntitie))
-  }, [props.search, props.schoolChooseEntitie, dispatch])
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const { rowsStudents } = useSubjectSelection( props.subjectSelection, rowsForStudents)
+
+  const { newRowsClassOfStudents, countRowsClassOfStudents } = useClassOfStudents(rows, props.classOfStudents)
+
+  const { countRowsdateSearch, newRowsDataSearch } = useDateSearch(rows, props.dateSearch)
+
+  const { rowsSchool, countsRowForSearch, newRowsSearch} = useSearchAndSchoolEntitie(props.search, props.schoolChooseEntitie, rows, dispatch, rowsProfessorForSchool, rowsStudentForSchool)
+
+  useEffect(()=>{
+    setCountRows(countRowsClassOfStudents)
+  },[countRowsClassOfStudents])
+
+  useEffect(()=>{
+    setCountRows(countRowsdateSearch)
+  },[countRowsdateSearch])
+
+  useEffect(()=>{
+    setCountRows(countsRowForSearch)
+  },[countsRowForSearch])
+
+  useEffect(()=>{
+    setNewRows(newRowsClassOfStudents)
+  },[newRowsClassOfStudents])
+
+  useEffect(()=>{
+    setNewRows(newRowsDataSearch)
+  },[newRowsDataSearch])
+
+  useEffect(()=>{
+    setNewRows(newRowsSearch)
+  },[newRowsSearch])
+
 
   return (
     <Paper sx={tableDesign}>
