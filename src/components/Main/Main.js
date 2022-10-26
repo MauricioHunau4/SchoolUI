@@ -37,7 +37,7 @@ export default function Main() {
                     textAlign: "center",
                     padding: "30px 0 0 0"
                 }}>
-                    The institutions that chose us
+                    The institutions that choose us
                 </Typography>
                 <Box sx={flexSchoolChoose}>
                     {schools.map(school => {
